@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { Navigate } from 'react-router-dom'; // NEW
 import { login, clearError } from '../store/authSlice';
 
 function Login() {
@@ -30,6 +31,9 @@ function Login() {
     dispatch(login(form));
   };
 
+  // NEW: must be below all hooks, above the return
+  if (currentUser) return <Navigate to="/" replace />;
+
   return (
     <div>
       <h2>Log in</h2>
@@ -47,7 +51,6 @@ function Login() {
         {error && <p style={{ color: 'red' }}>{error}</p>}
         <button type="submit">Log in</button>
       </form>
-      {currentUser && <p>Welcome back, {currentUser.name}</p>}
     </div>
   );
 }
