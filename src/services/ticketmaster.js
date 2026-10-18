@@ -29,3 +29,12 @@ export async function fetchCategories() {
   // remove duplicates by id
   return segments.filter((s, i) => segments.findIndex((x) => x.id === s.id) === i);
 }
+
+export async function fetchEventById(id) {
+  const query = new URLSearchParams({ apikey: API_KEY });
+  const res = await fetch(`${BASE_URL}/events/${id}.json?${query}`);
+  if (res.status === 404) throw new Error('Event not found');
+  if (res.status === 429) throw new Error('Too many requests. Wait a moment and try again.');
+  if (!res.ok) throw new Error('Failed to fetch event details');
+  return res.json();
+}
