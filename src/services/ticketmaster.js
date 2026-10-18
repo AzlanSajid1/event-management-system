@@ -10,8 +10,22 @@ export async function fetchEvents(params = {}) {
   });
 
   const res = await fetch(`${BASE_URL}/events.json?${query}`);
+  if (res.status === 429) throw new Error('Too many requests. Wait a moment and try again.');
   if (!res.ok) throw new Error('Failed to fetch events');
 
   const data = await res.json();
-  return data._embedded?.events || [];
+  return { events: data._embedded?.events || [], page: data.page };
+}
+
+export async function fetchCategories() {
+  const query = new URLSearchParams({ apikey: API_KEY, size: 100 });
+  const res = await fetch(`${BASE_URL}/classifications.json?${query}`);
+  if (!res.ok) throw new Error('Failed to fetch categories');
+
+  const data = await res.json();
+  const segments = (data._embedded?.classifications || [])
+    .map((c) => c.segment)
+    .filter(Boolean);
+  // remove duplicates by id
+  return segments.filter((s, i) => segments.findIndex((x) => x.id === s.id) === i);
 }
