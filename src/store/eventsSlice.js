@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import { fetchEvents, fetchCategories } from '../services/ticketmaster';
+import { fetchEvents, fetchCategories, fetchEventById } from '../services/ticketmaster';
 
 export const loadEvents = createAsyncThunk(
   'events/loadEvents',
@@ -23,6 +23,17 @@ export const loadCategories = createAsyncThunk(
   }
 );
 
+export const loadEventById = createAsyncThunk(
+  'events/loadEventById',
+  async (id, { rejectWithValue }) => {
+    try {
+      return await fetchEventById(id);
+    } catch (err) {
+      return rejectWithValue(err.message);
+    }
+  }
+);
+
 const eventsSlice = createSlice({
   name: 'events',
   initialState: {
@@ -31,6 +42,9 @@ const eventsSlice = createSlice({
     categories: [],
     loading: false,
     error: null,
+    selected: null,
+    selectedLoading: false,
+    selectedError: null,
   },
   reducers: {},
   extraReducers: (builder) => {
@@ -50,6 +64,19 @@ const eventsSlice = createSlice({
       })
       .addCase(loadCategories.fulfilled, (state, action) => {
         state.categories = action.payload;
+      })
+      .addCase(loadEventById.pending, (state) => {
+        state.selectedLoading = true;
+        state.selectedError = null;
+        state.selected = null;
+      })
+      .addCase(loadEventById.fulfilled, (state, action) => {
+        state.selectedLoading = false;
+        state.selected = action.payload;
+      })
+      .addCase(loadEventById.rejected, (state, action) => {
+        state.selectedLoading = false;
+        state.selectedError = action.payload || 'Something went wrong';
       });
   },
 });
