@@ -13,10 +13,8 @@ function RegistrationItem({ registration, canCancel, onCancel }) {
   const { event, registeredAt } = registration;
 
   return (
-    <div style={{ display: 'flex', gap: '1rem', border: '1px solid #ccc', borderRadius: 8, padding: '0.75rem' }}>
-      {event.image && (
-        <img src={event.image} alt={event.name} style={{ width: 120, height: 80, objectFit: 'cover' }} />
-      )}
+    <div className="reg-item">
+      {event.image && <img src={event.image} alt={event.name} />}
       <div>
         <h3>
           <Link to={`/events/${event.id}`}>{event.name}</Link>
@@ -28,9 +26,7 @@ function RegistrationItem({ registration, canCancel, onCancel }) {
           {event.venue || 'Venue to be announced'}
           {event.city ? `, ${event.city}` : ''}
         </p>
-        <p style={{ fontSize: '0.85rem', color: '#666' }}>
-          Registered on {new Date(registeredAt).toLocaleDateString()}
-        </p>
+        <p className="muted">Registered on {new Date(registeredAt).toLocaleDateString()}</p>
         {canCancel && <button onClick={onCancel}>Cancel registration</button>}
       </div>
     </div>
@@ -57,8 +53,8 @@ function MyEvents() {
   };
 
   return (
-    <div style={{ maxWidth: 800, margin: '0 auto', padding: '1rem' }}>
-      <h2>My Events</h2>
+    <div className="container">
+      <h2 className="page-title">My Events</h2>
 
       {mine.length === 0 && (
         <p>
@@ -69,7 +65,7 @@ function MyEvents() {
       {upcoming.length > 0 && (
         <>
           <h3>Upcoming</h3>
-          <div style={{ display: 'grid', gap: '1rem' }}>
+          <div className="reg-list">
             {upcoming.map((r) => (
               <RegistrationItem
                 key={r.event.id}
@@ -85,7 +81,7 @@ function MyEvents() {
       {completed.length > 0 && (
         <>
           <h3>Completed</h3>
-          <div style={{ display: 'grid', gap: '1rem' }}>
+          <div className="reg-list">
             {completed.map((r) => (
               <RegistrationItem key={r.event.id} registration={r} canCancel={false} />
             ))}
