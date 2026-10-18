@@ -8,22 +8,22 @@ function EventCard({ event }) {
   const category = event.classifications?.[0]?.segment?.name;
 
   return (
-    <div style={{ border: '1px solid #ccc', borderRadius: 8, overflow: 'hidden' }}>
-      {image && <img src={image} alt={event.name} style={{ width: '100%' }} />}
-      <div style={{ padding: '0.75rem' }}>
+    <div className="card">
+      {image && <img src={image} alt={event.name} />}
+      <div className="card-body">
+        {category && <span className="badge">{category}</span>}
         <h3>{event.name}</h3>
-        <p>
+        <p className="muted">
           {event.dates?.start?.localDate} {event.dates?.start?.localTime}
         </p>
-        <p>
+        <p className="muted">
           {venue?.name}
           {venue?.city?.name ? `, ${venue.city.name}` : ''}
         </p>
-        {category && <p>{category}</p>}
         <Link to={`/events/${event.id}`}>View details</Link>
       </div>
     </div>
   );
-} 
+}
 
 export default EventCard;

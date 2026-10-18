@@ -47,7 +47,7 @@ function RegisterButton({ event }) {
       ) : (
         <button onClick={handleRegister}>Register for this event</button>
       )}
-      {message && <p style={{ color: 'green' }}>{message}</p>}
+      {message && <p className="success">{message}</p>}
     </div>
   );
 }

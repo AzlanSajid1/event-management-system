@@ -13,11 +13,13 @@ function Navbar() {
   };
 
   return (
-    <nav style={{ display: 'flex', gap: '1rem', padding: '1rem' }}>
+    <nav className="navbar">
+      <Link to="/"><strong>EventHub</strong></Link>
       <Link to="/">Events</Link>
+      {currentUser && <Link to="/my-events">My Events</Link>}
+      <span className="spacer"></span>
       {currentUser ? (
         <>
-          <Link to="/my-events">My Events</Link>
           <span>Hi, {currentUser.name}</span>
           <button onClick={handleLogout}>Logout</button>
         </>

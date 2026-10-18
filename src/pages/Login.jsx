@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Navigate } from 'react-router-dom'; // NEW
+import { Navigate, Link } from 'react-router-dom';
 import { login, clearError } from '../store/authSlice';
 
 function Login() {
@@ -31,26 +31,26 @@ function Login() {
     dispatch(login(form));
   };
 
-  // NEW: must be below all hooks, above the return
   if (currentUser) return <Navigate to="/" replace />;
 
   return (
-    <div>
+    <div className="form-box">
       <h2>Log in</h2>
       <form onSubmit={handleSubmit}>
-        <div>
-          <label>Email</label>
-          <input name="email" value={form.email} onChange={handleChange} />
-          {formErrors.email && <p style={{ color: 'red' }}>{formErrors.email}</p>}
-        </div>
-        <div>
-          <label>Password</label>
-          <input type="password" name="password" value={form.password} onChange={handleChange} />
-          {formErrors.password && <p style={{ color: 'red' }}>{formErrors.password}</p>}
-        </div>
-        {error && <p style={{ color: 'red' }}>{error}</p>}
+        <label>Email</label>
+        <input name="email" value={form.email} onChange={handleChange} />
+        {formErrors.email && <p className="error">{formErrors.email}</p>}
+
+        <label>Password</label>
+        <input type="password" name="password" value={form.password} onChange={handleChange} />
+        {formErrors.password && <p className="error">{formErrors.password}</p>}
+
+        {error && <p className="error">{error}</p>}
         <button type="submit">Log in</button>
       </form>
+      <p className="muted">
+        No account? <Link to="/register">Register</Link>
+      </p>
     </div>
   );
 }

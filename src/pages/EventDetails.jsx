@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { loadEventById } from '../store/eventsSlice';
-import RegisterButton from '../components/RegisterButton'; // NEW
+import RegisterButton from '../components/RegisterButton';
 
 function EventDetails() {
   const { id } = useParams();
@@ -15,8 +15,8 @@ function EventDetails() {
     dispatch(loadEventById(id));
   }, [dispatch, id]);
 
-  if (selectedLoading) return <p>Loading event...</p>;
-  if (selectedError) return <p style={{ color: 'red' }}>{selectedError}</p>;
+  if (selectedLoading) return <div className="container"><p>Loading event...</p></div>;
+  if (selectedError) return <div className="container"><p className="error">{selectedError}</p></div>;
   if (!event) return null;
 
   const image =
@@ -31,38 +31,40 @@ function EventDetails() {
     .join(', ');
 
   return (
-    <div style={{ maxWidth: 800, margin: '0 auto', padding: '1rem' }}>
+    <div className="container">
       <Link to="/">&larr; Back to events</Link>
-      {image && <img src={image} alt={event.name} style={{ width: '100%', marginTop: '1rem' }} />}
-      <h2>{event.name}</h2>
+      {image && <img className="details-img" src={image} alt={event.name} />}
+      <div className="details-box">
+        <h2>{event.name}</h2>
 
-      <p><strong>Date:</strong> {start?.localDate} {start?.localTime || ''}</p>
-      <p><strong>Venue:</strong> {venue?.name || 'To be announced'}</p>
-      {address && <p><strong>Location:</strong> {address}</p>}
-      <p>
-        <strong>Category:</strong>{' '}
-        {[classification?.segment?.name, classification?.genre?.name, classification?.subGenre?.name]
-          .filter(Boolean)
-          .join(' / ') || 'N/A'}
-      </p>
-      {price && (
+        <p><strong>Date:</strong> {start?.localDate} {start?.localTime || ''}</p>
+        <p><strong>Venue:</strong> {venue?.name || 'To be announced'}</p>
+        {address && <p><strong>Location:</strong> {address}</p>}
         <p>
-          <strong>Price:</strong> {price.min} - {price.max} {price.currency}
+          <strong>Category:</strong>{' '}
+          {[classification?.segment?.name, classification?.genre?.name, classification?.subGenre?.name]
+            .filter(Boolean)
+            .join(' / ') || 'N/A'}
         </p>
-      )}
-      <p><strong>Status:</strong> {event.dates?.status?.code}</p>
-      {event.info && <p><strong>Info:</strong> {event.info}</p>}
-      {event.pleaseNote && <p><strong>Please note:</strong> {event.pleaseNote}</p>}
+        {price && (
+          <p>
+            <strong>Price:</strong> {price.min} - {price.max} {price.currency}
+          </p>
+        )}
+        <p><strong>Status:</strong> {event.dates?.status?.code}</p>
+        {event.info && <p><strong>Info:</strong> {event.info}</p>}
+        {event.pleaseNote && <p><strong>Please note:</strong> {event.pleaseNote}</p>}
 
-      <RegisterButton event={event} /> {/* NEW */}
+        <RegisterButton event={event} />
 
-      {event.url && (
-        <p>
-          <a href={event.url} target="_blank" rel="noreferrer">
-            View on Ticketmaster
-          </a>
-        </p>
-      )}
+        {event.url && (
+          <p>
+            <a href={event.url} target="_blank" rel="noreferrer">
+              View on Ticketmaster
+            </a>
+          </p>
+        )}
+      </div>
     </div>
   );
 }

@@ -23,7 +23,6 @@ function Events() {
     if (filters.category) params.segmentId = filters.category;
     if (filters.city) params.city = filters.city;
 
-    // Only show upcoming events by default
     const now = new Date().toISOString().split('.')[0] + 'Z';
     params.startDateTime = filters.startDate ? `${filters.startDate}T00:00:00Z` : now;
     if (filters.endDate) params.endDateTime = `${filters.endDate}T23:59:59Z`;
@@ -36,31 +35,23 @@ function Events() {
     setPage(0);
   };
 
-  // The API only allows paging up to 1000 results, so cap at 50 pages
   const totalPages = Math.min(pageInfo?.totalPages || 0, 50);
 
   return (
-    <div>
-      <h2>Upcoming Events</h2>
+    <div className="container">
+      <h2 className="page-title">Upcoming Events</h2>
       <SearchBar categories={categories} onApply={handleApply} />
 
       {loading && <p>Loading events...</p>}
-      {error && <p style={{ color: 'red' }}>{error}</p>}
+      {error && <p className="error">{error}</p>}
       {!loading && !error && items.length === 0 && <p>No events found.</p>}
 
-      <div
-        style={{
-          display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fill, minmax(250px, 1fr))',
-          gap: '1rem',
-          padding: '1rem',
-        }}
-      >
+      <div className="event-grid">
         {!loading && items.map((event) => <EventCard key={event.id} event={event} />)}
       </div>
 
       {totalPages > 1 && (
-        <div style={{ display: 'flex', gap: '1rem', justifyContent: 'center', padding: '1rem' }}>
+        <div className="pagination">
           <button onClick={() => setPage(page - 1)} disabled={page === 0}>
             Previous
           </button>

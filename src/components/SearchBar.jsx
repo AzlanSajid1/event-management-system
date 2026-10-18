@@ -20,10 +20,7 @@ function SearchBar({ categories, onApply }) {
   };
 
   return (
-    <form
-      onSubmit={handleSubmit}
-      style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem', padding: '1rem' }}
-    >
+    <form onSubmit={handleSubmit} className="filters">
       <input
         name="keyword"
         placeholder="Search events..."
